@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% load static %}
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <link rel="icon" href="static/images/favicon.png" type="image/gif" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Bostorek</title>
+  <base href="/">
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css" />
+  <!-- font awesome style -->
+  <link href="static/css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="static/css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="static/css/responsive.css" rel="stylesheet" />
+
+</head>
+
+<style>
+  .button-container {
+      display: flex;
+      justify-content: space-around; /* Adjust as needed */
+  }
+
+  .button-container button {
+      margin: 0 5px; /* Adjust spacing between buttons */
+  }
+  .stud-registration-form{
+    margin-left: -100px;
+    width: 600px;
+  }
+  .stud-registration-form input{
+    width: 350px;
+  }
+  @media (max-width: 800px)
+  {
+    .stud-registration-form {
+      margin-left: 20px;
+      margin-right: 20px;
+      width: auto;
+    }
+
+    .button-container {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button-container button {
+      margin: 5px 0;
+    }
+
+    .stud-registration-form label,
+    .stud-registration-form input {
+      width: 100%;
+      display: block;
+      margin: 5px 0;
+      text-align: left;
+    }
+  }
+
+  button{
+    background-color: #063547;
+  }
+  button:hover {
+    background-color: #085574;
+  }
+
+</style>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.html">
+            <span>
+              Bostorek
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link pl-lg-0" href="{% url 'home' %}">Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'callReturn' %}">Return Book</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div><br>
+  <!-- class table section -->
+  <main>
+    <div class="add-stud">
+      <form class="stud-registration-form" method="POST" action="{% url 'updateStudent' %}">
+        {% csrf_token %}
+        <div class="button-container">
+          <label for="stud_id" style="margin-right: 30px;"><b>Student ID:</b></label>
+          {% for x in student %}
+          <input type="text" id="stud_id" name="stud_id" value="{{ x.student_id }}"  required readonly>
+          {% endfor %}
+        </div>
+
+        <div class="button-container">
+          <label for="stud_name"><b>Student Name:</b></label>
+          {% for x in student %}
+          <input type="text" id="stud_name" name="stud_name" value="{{ x.student_name }}"  required readonly>
+          {% endfor %}
+        </div>
+  
+        {% for x in student %}
+        <div class="button-container">
+          <label for="phone"><b>Phone Number:</b></label>
+          <input type="number" id="phone" name="phone" value="{{ x.phone }}" required readonly>
+        </div>
+        {% endfor %}
+  
+        {% for x in student %}
+        <div class="button-container">
+          <label for="class" style="margin-right: 65px;"><b>Class:</b></label>
+          <input type="text" id="class" name="class" value="{{ x.class_dept }}" required readonly>
+        </div>
+        {% endfor %}
+  
+        {% for x in student %}
+        <div class="button-container">
+          <label for="roll"><b>Roll Number:</b></label>
+          <input type="number" id="roll" name="roll" value="{{ x.roll_no }}" required readonly>
+        </div>
+        {% endfor %}
+  
+        <div class="button-container">
+          <button type="button" id="edit-btn">Edit</button>
+          <button type="button" id="btn-save">Save</button>
+        </div>
+
+      </form>
+    </div><br><br>
+  </main>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editBtn = document.getElementById('edit-btn');
+        const saveBtn = document.getElementById('btn-save');
+        const nameInput = document.getElementById('stud_name');
+        const phoneInput = document.getElementById('phone');
+        const classInput = document.getElementById('class');
+        const rollInput = document.getElementById('roll');
+        const form = document.querySelector('.stud-registration-form'); // Select the form element
+    
+        // Initially, inputs should be readOnly
+        nameInput.readOnly = true;
+        phoneInput.readOnly = true;
+        classInput.readOnly = true;
+        rollInput.readOnly = true;
+    
+        editBtn.addEventListener('click', function() {
+            // When user clicks Edit, inputs become writable
+            nameInput.readOnly = false;
+            phoneInput.readOnly = false;
+            classInput.readOnly = false;
+            rollInput.readOnly = false;
+        });
+    
+        saveBtn.addEventListener('click', function(event) {
+            // Prevent the default form submission
+            event.preventDefault();
+    
+            // Show confirmation dialog
+            const confirmed = window.confirm('Are you sure you want to save changes?');
+            if (!confirmed) {
+                return; // Abort form submission if user cancels
+            }
+    
+            // Prepare form data
+            const formData = new FormData(form);
+    
+            // Send form data using AJAX
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Display success message using alert
+                    alert('Student record updated successfully.');
+                    // Redirect to previous page
+                    window.history.back();
+                } else {
+                    // Display error message using alert
+                    alert('Error updating student record. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Display error message using alert
+                alert('Error updating student record. Please try again.');
+            });
+        });
+    });
+    </script>
+    
+    
+    
+    
+    
+
+
+  <h1>{{ student.student_id }}</h1>
+  <!-- end class table section -->
+
+  <!-- info section -->
+
+  <section class="info_section layout_padding2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-3 info-col">
+          <div class="info_detail">
+            <h4>
+              About Us
+            </h4>
+            <div class="info_social">
+              <a href="">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3 info-col">
+          <div class="info_contact">
+            <h4>
+              Address
+            </h4>
+            <div class="contact_link_box">
+              <a href="">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <span>
+                  Location
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span>
+                  Call +01 1234567890
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>
+                  demo@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end info section -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayYear"></span> All Rights Reserved By
+        <a href="https://html.design/">Free Html Templates</a>
+      </p>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script src="static/js/jquery-3.4.1.min.js"></script>
+  <!-- bootstrap js -->
+  <script src="static/js/bootstrap.js"></script>
+  <!-- custom js -->
+  <script src="static/js/custom.js"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+  </script>
+  <!-- End Google Map -->
+
+</body>
+
+</html>

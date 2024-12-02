@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% load static %}
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/gif" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Bostorek</title>
+  <base href="/">
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <!-- font awesome style -->
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+</head>
+
+<style>
+  button{
+    background-color: #063547;
+  }
+  button:hover {
+    background-color: #085574;
+  }
+</style>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.html">
+            <span>
+              Bostorek
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link pl-lg-0" href="{% url 'home' %}">Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'callIssue' %}"> Issue Book</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'callReturn' %}">Return Book</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div><br><br>
+
+  <!-- add student form -->
+
+  <div class="add-stud">
+    <form class="stud-registration-form" method="POST" action="{% url 'delete_student' %}">
+      <h2>Delete a Student Record</h2><br>
+      {% csrf_token %}
+
+      <label for="stud_name"><b>Student Name:</b></label>
+      <input type="text" id="stud_name" name="stud_name" required>
+
+      <label for="class"><b>Select Class:</b></label>
+      <select id="class" name="class" required>
+        <option value="class1">- - - - -</option>
+        <option value="F.Y.BSc(CS)">F.Y.BSc(CS)</option>
+        <option value="S.Y.BSc(CS)">S.Y.BSc(CS)</option>
+        <option value="T.Y.BSc(CS)">T.Y.BSc(CS)</option>
+        <option value="F.Y.BCA">F.Y.BCA</option>
+        <option value="S.Y.BCA">S.Y.BCA</option>
+        <option value="T.Y.BCA">T.Y.BCA</option>
+        <option value="F.Y.MSc(CS)">F.Y.MSc(CS)</option>
+        <option value="S.Y.MSc(CS)">S.Y.MSc(CS)</option>
+        <option value="F.Y.MCA">F.Y.MCA</option>
+        <option value="S.Y.MCA">S.Y.MCA</option>
+      </select>
+
+      <label for="roll"><b>Roll No:</b></label>
+      <input type="number" id="roll" name="roll" required>
+
+      <!-- Add JavaScript confirmation for deleting the record -->
+      <button type="button" onclick="confirmDelete()">Delete</button>
+    </form>
+  </div><br><br>
+
+  <!-- student form end -->
+
+  <!-- info section -->
+
+  <section class="info_section layout_padding2">
+    <div class="container">
+    </div>
+  </section>
+
+  <!-- end info section -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayYear"></span> All Rights Reserved By
+        <a href="https://html.design/">Free Html Templates</a>
+      </p>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/custom.js' %}"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+  </script>
+  <!-- End Google Map -->
+
+  <div id="messages" style="display: none;"
+    {% for message in messages %}
+        data-message="{{ message }}"
+    {% endfor %}>
+  </div>
+
+  <script>
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete this record?")) {
+            if (confirm("Are you really sure? This action cannot be undone.")) {
+                document.querySelector(".stud-registration-form").submit();
+            }
+        }
+    }
+
+    function displayAlert(message) {
+        alert(message);
+    }
+
+    // Check if a message exists (from Django messages framework) and display it
+    window.onload = function() {
+        var messagesDiv = document.getElementById('messages');
+        var messages = messagesDiv.dataset.message;
+
+        if (messages) {
+            alert(messages);
+        }
+    };
+</script>
+
+
+</body>
+
+</html>

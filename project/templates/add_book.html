@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% load static %}
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <link rel="icon" href="static/images/favicon.png" type="image/gif" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Bostorek</title>
+  <base href="/">
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css" />
+  <!-- font awesome style -->
+  <link href="static/css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="static/css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="static/css/responsive.css" rel="stylesheet" />
+
+</head>
+
+<style>
+  button{
+    background-color: #063547;
+  }
+  button:hover {
+    background-color: #085574;
+  }
+</style>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.html">
+            <span>
+              Bostorek
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link pl-lg-0" href="{% url 'home' %}">Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'callIssue' %}"> Issue Book</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'callReturn' %}">Retun Book</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div><br><br>
+
+  <!-- add book form section -->
+
+  <div class="add-stud">
+    <form class="stud-registration-form" method = "POST" action="{% url 'addBook' %}">
+        <h2>Add a Book</h2><br>
+        {% csrf_token %}
+        
+        <label for="book_id"><b>Book Id:</b></label>
+        <input type="number" id="book_id" name="book_id" required>
+
+        <label for="book_name"><b>Book Name:</b></label>
+        <input type="text" id="book_name" name="book_name" required>
+
+        <label for="subject"><b>Subject:</b></label>
+        <input type="text" id="subject" name="subject" required>
+
+        <label for="publisher"><b>Publisher Name :</b></label>
+        <input type="text" id="publisher" name="publisher" required>
+
+        <label for="author"><b>Author Name :</b></label>
+        <input type="text" id="author" name="author" required>
+
+        <button type="submit">Add</button>
+    </form>
+  </div><br><br>
+
+  <!-- add book end -->
+
+  <!-- info section -->
+
+  <section class="info_section layout_padding2">
+    <div class="container">
+    </div>
+  </section>
+
+  <!-- end info section -->
+
+  <div id="messages" style="display: none;"
+    {% for message in messages %}
+        data-message="{{ message }}"
+    {% endfor %}>
+  </div>
+
+  <script>
+    window.onload = function() {
+        var messagesDiv = document.getElementById('messages');
+        var messages = messagesDiv.dataset.message;
+
+        if (messages) {
+            alert(messages);
+        }
+    };
+  </script>
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayYear"></span> All Rights Reserved By
+        <a href="https://html.design/">Free Html Templates</a>
+      </p>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script src="static/js/jquery-3.4.1.min.js"></script>
+  <!-- bootstrap js -->
+  <script src="static/js/bootstrap.js"></script>
+  <!-- custom js -->
+  <script src="static/js/custom.js"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+  </script>
+  <!-- End Google Map -->
+
+</body>
+
+</html>

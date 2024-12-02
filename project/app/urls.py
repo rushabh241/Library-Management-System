@@ -1,0 +1,30 @@
+from django.urls import re_path
+from . import views
+
+urlpatterns = [
+    re_path(r'home$', views.home),
+    re_path(r'addStudent$', views.addStudent),
+    re_path(r'addBook$', views.addBook),
+    re_path(r'callIssue$', views.callIssue),
+    re_path(r'callReturn$', views.callReturn),
+    re_path(r'call_manageStudent$', views.call_manageStudent),
+    re_path(r'manageStudent$', views.manageStudent),
+    re_path(r'studentDetails$', views.studentDetails),
+    re_path(r'updateStudent$', views.updateStudent),
+    re_path(r'call_manageBook$', views.call_manageBook),
+    re_path(r'manageBook$', views.manageBook),
+    re_path(r'bookDetails$', views.bookDetails),
+    re_path(r'updateBook$', views.updateBook),
+    re_path(r'issuePage$', views.issuePage),
+    re_path(r'issueInfo$', views.issueInfo),
+    re_path(r'issueBook$', views.issueBook),
+    re_path(r'display_records$', views.display_records),
+    re_path(r'returnPage$', views.returnPage),
+    re_path(r'returnInfo$', views.returnInfo),
+    re_path(r'returnBook$', views.returnBook),
+    re_path(r'display_records_return$', views.display_records_return),
+    re_path(r'student_reports$', views.student_reports),
+    re_path(r'book_reports$', views.book_reports),
+    re_path(r'pending$', views.pending),
+    re_path(r'delete_student$', views.delete_student),
+]

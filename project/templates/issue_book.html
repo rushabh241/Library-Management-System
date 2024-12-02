@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% load static %}
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <link rel="icon" href="static/images/favicon.png" type="image/gif" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Bostorek</title>
+  <base href="/">
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css" />
+  <!-- font awesome style -->
+  <link href="static/css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="static/css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="static/css/responsive.css" rel="stylesheet" />
+
+  {% if msg %}
+  <script>
+    // Function to display alert box with the provided message
+    function showAlert(msg) {
+      alert(msg);
+      window.history.back(); // Go back to the previous page
+      $('#book_id').val('');
+      return false;
+    }
+
+    // Call the showAlert function with the message from the template
+    showAlert("{{ msg }}");
+  </script>
+{% endif %}
+</head>
+
+<style>
+  .button-container {
+      display: flex;
+      justify-content: space-around; /* Adjust as needed */
+  }
+
+  .button-container button {
+      margin: 0 5px; /* Adjust spacing between buttons */
+  }
+  .stud-registration-form{
+    margin-left: -100px;
+    width: 600px;
+  }
+  .stud-registration-form input{
+    width: 350px;
+  }
+  @media (max-width: 800px)
+  {
+    .stud-registration-form {
+      margin-left: 20px;
+      margin-right: 20px;
+      width: auto;
+    }
+
+    .button-container {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button-container button {
+      margin: 5px 0;
+    }
+
+    .stud-registration-form label,
+    .stud-registration-form input {
+      width: 100%;
+      display: block;
+      margin: 5px 0;
+      text-align: left;
+    }
+  }
+
+  button{
+    background-color: #063547;
+  }
+  button:hover {
+    background-color: #085574;
+  }
+
+</style>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.html">
+            <span>
+              Bostorek
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link pl-lg-0" href="{% url 'home' %}">Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'callReturn' %}">Return Book</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div><br>
+  <!-- class table section -->
+  <!-- class table section -->
+<!-- class table section -->
+<main>
+  <div class="add-stud">
+      <form class="stud-registration-form" method="POST" action="{% url 'issueBook' %}">
+          {% csrf_token %}
+          <div class="button-container">
+              {% for x in student %}
+              <input type="hidden" id="stud_id" name="stud_id" value="{{ x.student_id }}" required readonly>
+              {% endfor %}
+          </div>
+
+          <div class="button-container">
+              <label for="book_id"><b>Enter Book ID:</b></label>
+              <input type="number" id="book_id" name="book_id" required>
+          </div>
+
+          <div class="button-container">
+              <button type="submit" style="width: 200px;">Issue Book</button>
+          </div>
+      </form>
+  </div>
+  
+  <!-- Link to view issued books -->
+  <div class="add-stud">
+    <form action="{% url 'display_records' %}" method="POST" class="stud-registration-form">
+      {% csrf_token %}
+      {% for x in student %}
+      <input type="hidden" name="student_id" id="student_id" value="{{ x.student_id }}">
+      {% endfor %}
+      <div class="button-container">
+        <button type="submit" style="width:200px; background-color: white; color: black;"><b>View Issued Books</b></button>
+      </div>
+    </form>
+  </div><br><br>
+
+  <!-- Table to display issued books records -->
+  {% if issued_books %}
+    <!-- Table to display issued books records -->
+    <table id="issued-books-table">
+        <thead>
+            <tr>
+                <th>Book ID</th>
+                <th>Book Name</th>
+                <th>Issued Date</th>
+                <th>Expected Return Date</th>
+                <th>Actual Return Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for x in issued_books %}
+            <tr>
+              <td>{{ x.book_id }}</td>
+              <td>{{ x.book_name }}</td>
+              <td>{{ x.issue_date }}</td>
+              <td>{{ x.expected_return_date }}</td>
+              <td>{{ x.return_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  {% endif %}
+</main>
+<br><br><br><br>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Add event listener to the button in the second form
+      document.getElementById('fetch-book-name-btn').addEventListener('click', function() {
+          // Extract the book ID from the first form
+          const bookId = document.getElementById('book_id').value;
+          
+          // Make an AJAX request to fetch the book name
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', `/get_book_name/?book_id=${bookId}`);
+          xhr.onload = function() {
+              if (xhr.status === 200) {
+                  // Update the HTML to display the retrieved book name
+                  document.getElementById('book-name-display').textContent = xhr.responseText;
+              } else {
+                  console.error('Failed to fetch book name');
+              }
+          };
+          xhr.send();
+      });
+  });
+  </script>
+
+
+  <!-- end class table section -->
+
+  <!-- info section -->
+  <section class="info_section layout_padding2">
+    <div class="container">
+    </div>
+  </section>
+  <!-- end info section -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayYear"></span> All Rights Reserved By
+        <a href="https://html.design/">Free Html Templates</a>
+      </p>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script src="static/js/jquery-3.4.1.min.js"></script>
+  <!-- bootstrap js -->
+  <script src="static/js/bootstrap.js"></script>
+  <!-- custom js -->
+  <script src="static/js/custom.js"></script>
+</body>
+</html>
